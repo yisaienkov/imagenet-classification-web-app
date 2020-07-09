@@ -39,7 +39,7 @@ def load_image(image_path, preprocess=None):
 
 def predict_probabilities(image, model):
     with torch.no_grad():
-        output = torch.nn.functional.softmax(model(image)[0], dim=0).numpy()
+        output = torch.nn.functional.softmax(model(image)[0], dim=0).cpu().data.numpy()
     return output
 
 
@@ -52,7 +52,7 @@ def get_classes_by_numbers(indexes, labels_dict):
 
 def predict_class(image_path, model_config, count=3):
     image = load_image(image_path, model_config.transforms)
-    image.to(model_config.device)
+    image = image.to(model_config.device)
 
     probs = predict_probabilities(image, model_config.model)
 
@@ -67,11 +67,9 @@ def predict_class(image_path, model_config, count=3):
 class ModelConfig:
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-    model = load_mobilenet_v2()
-    model.to(device)
+    model = load_mobilenet_v2().to(device)
 
     transforms = get_preprocess()
 
     with open('resources/imagenet_labels.json', 'r') as f:
         labels = json.load(f)
-
