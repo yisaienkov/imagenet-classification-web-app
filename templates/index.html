@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ImageNet Classification</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit" name="predict">
+    </form>
+    {% if image_name %}
+        <h2>Your Image:</h2>
+        <img src="{{ url_for('static', filename=image_name) }}" width="224" height="224">
+    {% endif %}
+    {% if res %}
+        <h2>Prediction:</h2>
+        {% for i, j in res %}
+            <h3>{{ i | round(2) }} - {{ j }}</h3>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
