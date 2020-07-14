@@ -19,6 +19,7 @@ def index():
         image_file.save(image_loc)
 
         probs, names = predict_class(image_loc, ModelConfig)
+        
         return render_template('index.html', res=zip(probs, names), image_name=image_name)
     return render_template('index.html', res=None, image_name=None)
 
